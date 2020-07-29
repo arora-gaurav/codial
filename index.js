@@ -1,8 +1,13 @@
 const express = require('express');
 const app = express();
+const cookieParser = require('cookie-parser');
 const port = 8000;
+const db = require('./config/mongoose');
+
 
 app.use(express.static('./assets'));
+app.use(express.urlencoded());
+app.use(cookieParser());
 
 const expressLayouts = require('express-ejs-layouts');
 app.use(expressLayouts);
@@ -14,6 +19,8 @@ app.set('view engine', 'ejs');
 app.set('views', './views');
 
 app.use('/', require('./routes/index'));
+
+
 
 app.listen(port, function(err){
     if(err){
