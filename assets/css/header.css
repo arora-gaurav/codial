@@ -1,0 +1,23 @@
+body {
+  margin: 0;
+  padding: 0; }
+  body #nav-section {
+    display: flex;
+    background-color: steelblue;
+    margin-top: 0;
+    height: 2rem;
+    line-height: 2rem;
+    color: white; }
+    body #nav-section #logo {
+      font-size: 1.5rem;
+      margin-left: 2rem;
+      font-weight: bold;
+      width: 86vw; }
+    body #nav-section div {
+      margin-right: 1rem;
+      position: relative; }
+      body #nav-section div a:link {
+        color: white;
+        text-decoration: none; }
+      body #nav-section div a:visited {
+        color: white; }

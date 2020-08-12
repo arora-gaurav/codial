@@ -1,0 +1,27 @@
+#btm-nav {
+  position: absolute;
+  display: flex;
+  background-color: grey;
+  bottom: 0;
+  width: 100%;
+  height: 3rem;
+  line-height: 3rem;
+  color: white;
+  overflow: hidden; }
+  #btm-nav div {
+    margin-left: 2rem; }
+  #btm-nav #inner-flex {
+    display: flex;
+    flex-direction: column;
+    justify-content: center; }
+    #btm-nav #inner-flex div {
+      margin-top: 0;
+      margin-bottom: 0;
+      font-size: 1rem;
+      line-height: 1rem;
+      text-decoration: none; }
+      #btm-nav #inner-flex div a:link {
+        color: white;
+        text-decoration: none; }
+      #btm-nav #inner-flex div a:visited {
+        color: white; }

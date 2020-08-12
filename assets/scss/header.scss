@@ -1,0 +1,33 @@
+body{
+    margin: 0;
+    padding: 0;
+
+    #nav-section{
+        display: flex;
+        background-color: steelblue;
+        margin-top: 0;
+        height: 2rem;
+        line-height: 2rem;
+        color: white;
+
+        #logo{
+            font-size: 1.5rem;
+            margin-left: 2rem;
+            font-weight: bold;
+            width: 86vw;
+        }
+
+        div{
+            margin-right: 1rem;
+            position: relative;
+            a:link{
+                color: white;
+                text-decoration: none;
+            }
+            a:visited{
+                color: white;
+            }
+        }
+   
+    }
+}
