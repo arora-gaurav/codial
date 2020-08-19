@@ -1,5 +1,5 @@
 #btm-nav {
-  position: absolute;
+  position: fixed;
   display: flex;
   background-color: grey;
   bottom: 0;

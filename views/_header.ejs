@@ -1,8 +1,8 @@
 <header>
     <div id="nav-section">
-        <div id="logo">Codial</div>
+        <div id="logo"><a href="/">Codial</a></div>
         <% if(locals.user){ %>
-            <div id="user-name"><a href="/users/profile"><%= user.user %></a></div>
+            <div id="user-name"><a href="/users/profile/<%= user.id %>"><%= user.user %></a></div>
             <div id="sign-out"><a href="/users/sign-out">Sign Out</a></div>
         <% } else { %>
             <div id="sign-in"><a href="/users/sign-in">Sign In</a></div>
