@@ -1,14 +1,17 @@
 const Post = require('../models/post');
 const Comment = require('../models/comment');
 
+
 module.exports.create = async function(req, res){
     try{
             let post = await Post.create({
             content: req.body.content,
             user: req.user._id
         })
-        // Post.findById(post._id).populate('user', '-password');
+        
         if(req.xhr){
+            
+            post = await post.populate('user', 'user').execPopulate();
             return res.status(200).json({
                 data: {
                     post: post

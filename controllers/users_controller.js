@@ -25,7 +25,7 @@ module.exports.update = function(req, res){
 
 module.exports.sign_in = function(req, res){
     if(req.isAuthenticated()){
-        return res.redirect('back'); 
+        return res.redirect('/'); 
     }
     return res.render('user_sign_in', {
         title: 'Codial | Sign In'
@@ -34,7 +34,7 @@ module.exports.sign_in = function(req, res){
 
 module.exports.sign_up = function(req, res){
     if(req.isAuthenticated()){
-        return res.redirect('/users/profile');
+        return res.redirect('/');
     }
     return res.render('user_sign_up', {
         title: 'Codial | Sign Up'

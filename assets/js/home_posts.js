@@ -1,8 +1,4 @@
 {
-    let all_Posts = $('.all-posts');
-    for(p of all_Posts){
-        deletePost($(' .delete-post-button', p)); 
-    }
     
     // Method to submit the form data for new post using AJAX
     let createPost = function(){
@@ -16,8 +12,16 @@
                 success: function(data){
                     let newPost = newPostDom(data.data.post);
                     $('#posts-list-container>ul').prepend(newPost);
-           
-                    deletePost($(' .delete-post-button', newPost)); 
+                    
+                    new Noty({
+                        theme: 'relax',
+                        text: "Post published",
+                        type: 'success',
+                        layout: 'topRight',
+                        timeout: 1500
+                    }).show();
+                    deletePost($(' .delete-post-button', newPost));  
+                    
                 }, error: function(error){
                     console.log(error.responseText);
                 }
@@ -67,12 +71,28 @@
                 url: $(deleteLink).prop('href'),
                 success: function(data){
                     $(`#post-${data.data.post_id}`).remove();
+                    new Noty({
+                        theme: 'relax',
+                        text: "Post Deleted",
+                        type: 'success',
+                        layout: 'topRight',
+                        timeout: 1500
+                    }).show();
                 }, error: function(error){
                     console.log(error.responseText);
                 }
             });
         });
     }
+  
+    let delete_All_Post = function(){
+            let all_Posts = $('.all-posts');
+           
+                for(p of all_Posts){
+                   deletePost($(' .delete-post-button', p)); 
+                   }
+    }
 
     createPost();
+    delete_All_Post();
 }
