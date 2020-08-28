@@ -1,5 +1,9 @@
 const Comment = require('../models/comment');
 const Post = require('../models/post');
+const commentsMailer = require('../mailers/comments_mailer');
+
+const queue = require('../config/kue');
+const commentEmailWorker = require('../workers/comment_email_worker');
 
 module.exports.create = async function(req, res){
     try {
@@ -12,8 +16,22 @@ module.exports.create = async function(req, res){
             });
             post.comments.push(comment);
             post.save();
+
+            comment = await comment.populate('user', 'user email').execPopulate();
+            //Without Delayed jobs
+            // commentsMailer.newComment(comment);
+
+            //With Delayed jobs using kue
+            let job = queue.create('emails', comment).save(function(err){
+                if(err){
+                    console.log('error in sending job to queue', err);
+                    return;
+                }
+                console.log('job enqueued', job.id);
+            });
+            
             if(req.xhr){
-                comment = await comment.populate('user', 'user').execPopulate();
+                
                 return res.status(200).json({
                     data: {
                         comment: comment
