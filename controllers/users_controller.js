@@ -1,6 +1,12 @@
 
 const User = require('../models/user');
+const ResetPassToken = require('../models/reset_pass_token');
 //  const { user } = require('../routes');
+const crypto = require('crypto');
+
+const queue = require('../config/kue');
+const accessTokenEmailWorker = require('../workers/access_token_email_worker');
+
 const fs =require('fs');
 const path = require('path');
 
@@ -15,6 +21,7 @@ module.exports.profile = function(req, res){
 }
 
 module.exports.update = async function(req, res){
+    
     // if(req.params.id ==  req.user.id){
     //     // Simply pass req.body if it has same name and email in user also, but since i mistakenly used user instead of name, so write explicitly
     //      User.findByIdAndUpdate(req.params.id, req.body, function(err, user){
@@ -108,4 +115,66 @@ module.exports.destroySession = function(req, res){
     req.logout();
     req.flash('success', 'You have logged out');
     return res.redirect('/');
+}
+
+module.exports.forgetPassword = function(req, res){
+    return res.render('forget_password', {
+        title: 'Codial | Forget Password'
+    })
+}
+
+module.exports.resetPassword = async function(req, res){
+    let resetToken;
+    try{
+        let user = await User.findOne({email: req.body.email});
+        resetToken = await ResetPassToken.create({
+            accessToken: crypto.randomBytes(20).toString('hex'),
+            user: user._id,
+            isValid: true
+        });
+        resetToken = await resetToken.populate('user', 'user email').execPopulate();
+    } catch(err){
+        console.log('Error', err);
+    }
+    let job = queue.create('resetPasswords', resetToken).save(function(err){
+        if(err){
+            console.log('error in sending job to queue', err);
+            return;
+        }
+        console.log('job enqueued', job.id);
+    });  
+    req.flash('success', 'Reset-Password link send to email');
+    res.redirect('back');
+}
+
+module.exports.changePassword = async function(req, res){
+    let resetToken = await ResetPassToken.findOne({accessToken: req.query.accessToken});
+    if(resetToken && resetToken.isValid){
+        resetToken.isValid = false;
+        return res.render('reset_password', {
+            title: 'Change Password',
+            resetToken: resetToken
+        });
+    } else {
+        console.log('Error in validating access token');
+        return;
+    }
+}
+
+module.exports.savePassword = function(req, res){
+    if(req.body.password != req.body.confirm_password){
+        req.flash('error', "Re-enter Password and Confirm Password");
+        return res.redirect('back');
+    }
+    User.findByIdAndUpdate(req.params.id, {password: req.body.password}, function(err, user){
+        if(err){
+            console.log('Error in updating user', err);
+            return;
+        }
+        if(user){
+            req.flash('success', 'Password changed successfully');
+            return res.redirect('/users/sign-in');
+        }
+    });
+    
 }
