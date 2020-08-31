@@ -30,3 +30,12 @@
         </div>
         <script src="/js/home_posts.js"></script>
         <script src="/js/post_comments.js"></script>
+
+        <script src="/js/toggle_likes.js"></script>
+        <script>
+                $('.toggle-like-button').each(function(){
+                        let self = this;
+                        //console.log('Value of this in home ejs', this);
+                        let toggleLike = new ToggleLike(self);
+                });
+        </script>

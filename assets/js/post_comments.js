@@ -12,7 +12,8 @@
                     let newComment = newCommentDOM(data.data.comment);
                     $(`#post-comment-${data.data.comment.post}`).prepend(newComment);
                     deleteComment($(' .delete-comment-button', newComment));
-                    console.log($(' .delete-comment-button', newComment));
+                    new ToggleLike($(' .toggle-like-button', newComment));
+                    //console.log($(' .delete-comment-button', newComment));
                     new Noty({
                         theme: 'relax',
                         text: "Comment Created",
@@ -39,7 +40,13 @@
                         <small>
                         ${ comment.user.user }
                         </small>
-                </p>
+                        <br>
+                            <small>
+                                <a class = "toggle-like-button" data-likes = "0" href="/likes/toggle/?id=${ comment._id }&type=Comment">
+                                    0 Likes
+                                </a>                          
+                            </small>
+                    </p>
                 </li>`);
     }
 
