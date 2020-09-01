@@ -1,6 +1,7 @@
 
 const User = require('../models/user');
 const ResetPassToken = require('../models/reset_pass_token');
+const Friendship = require('../models/friendship');
 //  const { user } = require('../routes');
 const crypto = require('crypto');
 
@@ -10,13 +11,31 @@ const accessTokenEmailWorker = require('../workers/access_token_email_worker');
 const fs =require('fs');
 const path = require('path');
 
-module.exports.profile = function(req, res){
-    User.findById(req.params.id, function(err,user){
-        return res.render('users_profile', {
-            title: 'Profile Page',  
-            profile_user: user
-        })
-    })
+module.exports.profile = async function(req, res){
+    let user = await User.findById(req.params.id);
+    let is_friend = false;
+    let friendship = await Friendship.findOne({
+        $or: [
+            {
+                from_user: req.user._id,
+                to_user: req.params.id
+            },
+            {
+                from_user: req.params.id,
+                to_user: req.user._id
+            }
+        ]
+    });
+    console.log('Friendship is', friendship);
+    if(friendship){
+        is_friend = true;
+    }
+    //console.log('hi', friendship);
+    return res.render('users_profile', {
+        title: 'Profile Page',  
+        profile_user: user,
+        is_friend: is_friend
+    });
     
 }
 

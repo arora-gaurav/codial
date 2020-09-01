@@ -14,4 +14,22 @@
                 <!-- Else Show only the Profile Info -->
                 <p><%= profile_user.user %></p>
                 <p><%= profile_user.email %></p>
+                <p>
+                        <a class="toggle-friend-button" href="/friendships/toggle/?to=<%= profile_user._id %>">
+                                <% if(is_friend){ %>
+                                Remove
+                                <% } else{ %> 
+                                Add
+                                <% } %>
+                        </a>
+                </p>
+                
         <% } %>        
+        <script src="/js/toggle_friendships.js"></script>
+        <script>
+               $('.toggle-friend-button').each(function(){
+                        let self = this;
+                        console.log('Value of this in home ejs', this);
+                        let toggleFriendship = new ToggleFriendship(self);
+                });
+        </script>

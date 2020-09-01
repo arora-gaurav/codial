@@ -14,20 +14,38 @@ module.exports.home = async function(req, res){
                 'createdAt': -1
             }
         },
-        populate: {
-            path: 'user'
-        }
-        // populate: {
-        //     path: 'likes'
-        // }   
+        populate: [
+            {
+                path: 'user'
+            },
+            {
+                path: 'likes'
+            }]
     })
     .populate('likes');
     // console.log('User associated with comments', posts[0].comments);
     let users = await User.find({});  
+    let curr_user;
+    if(req.user){
+        curr_user = await User.findById(req.user._id)
+        .populate({
+            path: 'friendships',
+            populate: [{
+                path: 'to_user',
+                select: 'user email'
+            },
+            {
+                path: 'from_user',
+                select: 'user email'
+            }]
+        });
+    }
+     
     return res.render('home', {
         title: 'Codial | Home',
         posts: posts,
-        all_users: users
+        all_users: users,
+        curr_user: curr_user
     });
     } catch(err){
         console.log('Error', err);

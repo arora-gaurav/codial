@@ -20,12 +20,29 @@
                         </div>
                 </section>
                 <section id="user-friends">
-                   <h4>Friends</h4>
-                   <% for(u of all_users){ %>
-                        <p>
-                            <a href="users/profile/<%= u.id %>"><%= u.user %></a>    
-                        </p>
-                   <% } %>
+                        <div id="friends-container">
+                                <h4>Friends</h4>
+                                <% if(locals.user){ %>
+                                        <% for(u of curr_user.friendships){ %>
+                                                <p>
+                                                        <% if(locals.user.id == u.to_user.id){ %>
+                                                                <a href="users/profile/<%= u.from_user.id %>"><%= u.from_user.user %></a>
+                                                        <% }else{ %>
+                                                        <a href="users/profile/<%= u.to_user.id %>"><%= u.to_user.user %></a>
+                                                        <% } %>
+                                                </p>
+                                        <% } %>
+                                <% } %>        
+                        </div>
+                        <div id="users-container">
+                                <h4>Users</h4>
+                                <% for(u of all_users){ %>
+                                        <p>
+                                        <a href="users/profile/<%= u.id %>"><%= u.user %></a>    
+                                        </p>
+                                <% } %>
+                        </div>
+                   
                 </section>
         </div>
         <script src="/js/home_posts.js"></script>
