@@ -2,14 +2,14 @@ class ToggleLike{
     constructor(toggleElement){
         this.toggler = toggleElement;
         this.toggleLike();
-        //console.log('Value of this in constructor', this);
+       
     }
 
     toggleLike(){
-        //console.log('Value of this in toggle like', this);
+        
         $(this.toggler).click(function(e){
             e.preventDefault();
-            //console.log('Value of this in toggle like', this);
+            
             let self = this;
             //This is new way of writing AJAX, looks like the same as promises
             $.ajax({
